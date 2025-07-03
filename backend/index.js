@@ -1,3 +1,10 @@
+const helmet = require("helmet");
+
+// Helmet middleware for security
+// sets various HTTP headers to help protect the app
+// from well-known web vulnerabilities.
+app.use(helmet());
+
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -31,6 +38,7 @@ app.use(cookieParser());
 
 // routes
 const authRoutes = require("./routes/auth.js");
+const { kMaxLength } = require("buffer");
 
 // API routes
 app.use("/api/auth", authRoutes);
