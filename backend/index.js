@@ -1,13 +1,12 @@
 const helmet = require("helmet");
-
 // Helmet middleware for security
 // sets various HTTP headers to help protect the app
 // from well-known web vulnerabilities.
-app.use(helmet());
 
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const mongoSanitize = require("express-mongo-sanitize");
 
 dotenv.config({
   path: path.join(__dirname, '../.env')
@@ -32,7 +31,9 @@ mongoose.connection.on('connected', () => {
 mongoose.connect(process.env.MONGO_URL, {});
 
 // middleware
-app.use(express.json());
+app.use(helmet());
+app.use(mongoSanitize());
+app.use(express.json({limit: "20kb"}));
 app.use(cookieParser());
 
 
