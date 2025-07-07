@@ -64,7 +64,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await apiClient.post('/auth/logout'); // Change from GET to POST
+      await apiClient.get('/auth/logout'); // Change from GET to POST
       setUser(null);
     } catch (error) {
       setUser(null); // Still set user to null even if logout fails

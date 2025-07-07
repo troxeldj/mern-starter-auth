@@ -31,15 +31,24 @@ mongoose.connection.on('connected', () => {
 mongoose.connect(process.env.MONGO_URL, {});
 
 // middleware
+// required for compatibility with express-mongo-sanitize and express 5.0
+app.use((req, res, next) => {
+  Object.defineProperty(req, 'query', {
+    ...Object.getOwnPropertyDescriptor(req, 'query'),
+    value: req.query,
+    writable: true,
+  });
+  next();
+});
+
 app.use(helmet());
-app.use(mongoSanitize());
-app.use(express.json({limit: "20kb"}));
+app.use(express.json({ limit: "20kb" }));
 app.use(cookieParser());
+app.use(mongoSanitize());
 
 
 // routes
 const authRoutes = require("./routes/auth.js");
-const { kMaxLength } = require("buffer");
 
 // API routes
 app.use("/api/auth", authRoutes);
